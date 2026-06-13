@@ -13,6 +13,9 @@ set(CMAKE_CXX_STANDARD 20)
 # Interdire à CMake de redescendre vers un standard plus ancien
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Interdire l'utilisation d'extensions spécifiques au compilateur (portabilité)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 # Création d'une bibliothèque statique nommée JobSystem
 # Le fichier compilé sera :
 #   Linux   -> libJobSystem.a
@@ -67,3 +70,10 @@ add_executable(JobSystemExample
 target_link_libraries(JobSystemExample PRIVATE
     JobSystem
 )
+
+# Gestion des warnings selon le compilateur utilisé
+if (MSVC)
+    target_compile_options(JobSystem PRIVATE /W4 /permissive-)
+else()
+    target_compile_options(JobSystem PRIVATE -Wall -Wextra -Wpedantic)
+endif()
