@@ -1,0 +1,69 @@
+# Version minimale de CMake requise pour configurer le projet
+cmake_minimum_required(VERSION 3.24)
+
+# Déclaration du projet :
+# - Nom : JobSystem
+# - Version : 1.0
+# - Langage utilisé : C++
+project(JobSystem VERSION 1.0 LANGUAGES CXX)
+
+# Utiliser le standard C++20
+set(CMAKE_CXX_STANDARD 20)
+
+# Interdire à CMake de redescendre vers un standard plus ancien
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Création d'une bibliothèque statique nommée JobSystem
+# Le fichier compilé sera :
+#   Linux   -> libJobSystem.a
+#   Windows -> JobSystem.lib
+add_library(JobSystem STATIC
+    src/JobSystem.cpp
+)
+
+# Ajoute le dossier include aux chemins de recherche des headers
+#
+# PUBLIC signifie :
+# - JobSystem utilise ce dossier
+# - Tous les projets qui lient JobSystem l'utiliseront aussi
+#
+target_include_directories(JobSystem PUBLIC
+    ${PROJECT_SOURCE_DIR}/include
+)
+
+# Active le système de tests de CMake (ctest)
+enable_testing()
+
+# Création de l'exécutable contenant les tests unitaires
+add_executable(JobSystemTests
+    tests/JobSystemTests.cpp
+)
+
+# Lie la bibliothèque JobSystem aux tests
+#
+# Les tests peuvent désormais utiliser les classes
+# et fonctions définies dans JobSystem.
+target_link_libraries(JobSystemTests PRIVATE
+    JobSystem
+)
+
+# Enregistre l'exécutable comme test CTest
+#
+# Commande disponible ensuite :
+#   ctest
+#
+add_test(
+    NAME JobSystemTests
+    COMMAND JobSystemTests
+)
+
+# Création d'un exécutable d'exemple montrant
+# comment utiliser la bibliothèque
+add_executable(JobSystemExample
+    examples/main.cpp
+)
+
+# Lie la bibliothèque JobSystem à l'exemple
+target_link_libraries(JobSystemExample PRIVATE
+    JobSystem
+)
