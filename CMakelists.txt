@@ -16,6 +16,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Interdire l'utilisation d'extensions spécifiques au compilateur (portabilité)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Ajouter les symboles de debug pour le debugging
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+
 # Création d'une bibliothèque statique nommée JobSystem
 # Le fichier compilé sera :
 #   Linux   -> libJobSystem.a
